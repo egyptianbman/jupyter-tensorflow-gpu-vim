@@ -10,6 +10,7 @@ ENV TERM xterm-256color
 # PHP
 RUN echo 'deb http://packages.dotdeb.org jessie all' >> /etc/apt/sources.list \
     && echo 'deb-src http://packages.dotdeb.org jessie all' >> /etc/apt/sources.list \
+    && gpg --keyserver keys.gnupg.net --recv-key 89DF5277 && gpg -a --export 89DF5277 | apt-key add - \
     && apt-get update \
     && apt-get -y --force-yes install php7.0 php7.0-dev uuid-dev pkg-config libsodium-dev php-pear
 
@@ -47,6 +48,11 @@ RUN cd /tmp \
 
 # Bash
 RUN pip install bash_kernel && python -m bash_kernel.install
+
+# Octave & gnuplot
+RUN apt-get -y install octave gnuplot \
+    && pip install octave_kernel \
+    && python -m octave_kernel.install
 
 # Python 3
 RUN apt-get -y install python3-pip \
